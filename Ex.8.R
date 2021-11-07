@@ -1,25 +1,61 @@
 setwd("~/Desktop/r-novice-inflammation/Biocomp-Exercise08/")
 list.files()
+
+#Question 1 
+#Loading data
 data <- read.table(file="UWvMSU_1-22-13.txt", header=TRUE, sep="")
 data
 str(data)
 head(data)
-?plot
-plot(data)
+
 #graph is cumulative score as a function of time in the game
 #create data frame or matrix with cumulative score for each team whenever each team scores
+#empty matrix to store cumulative score of each team
+UW <- matrix(nrow=nrow(data[data$team=="UW",])+1, ncol=2)
+MSU <- matrix(nrow=nrow(data[data$team=="MSU",])+1, ncol=2)
 
-UWSum=0
-MSUSum=0
+UW[1,1:2] <- 0
+MSU[1,1:2] <- 0
+
+UWrow <- 2 #starting at 2 because we already filled row 2
+MSUrow <- 2
+UWScore <- 0
+MSUScore <- 0
 for(i in 1:nrow(data)){
   if(data$team[i]=="UW"){
-    UWSum=UWSum + data$score[i] 
+  UW[UWrow,1] <- data$time[i]
+  UWScore <- UWScore + data$score[i]
+  UW[UWrow,2] <- UWScore
+  UWrow <- UWrow + 1 #1 indicates for subsequent row
   }else{
-    MSUSum=MSUSum + data$score[i]  
+  MSU[MSUrow,1] <- data$time[i]
+  MSUScore <- MSUScore + data$score[i]
+  MSU[MSUrow,2] <- MSUScore
+  MSUrow <- MSUrow + 1 #1 indicates for subsequent row  
   }
-}
-UWSum #Total score by the end of the game
-MSUSum #Total score by the end of the game
+} #end i loop
+
+#Making the plot: time vs. cumulative score
+UWplot <- plot(UW[,1], UW[,2], type='l')
+lines(MSU[,1], MSU[,2])
 
 #Question 2
-print("I'm thinking of a number between 1 and 100")
+#Number the game is thinking of
+randomNum <- sample(1:100, 1)
+
+#User input:
+guess <- as.integer(readline("I'm thinking of a number 1-100..."))
+
+#For loop
+for (n in 1:10){
+  if(as.integer(guess) < randomNum){
+    print("Higher")
+    guess <- readline("Try again:")
+  }else if(as.integer(guess) > randomNum){
+    print("Lower")
+    guess <- readline("Try again:")
+  }else{
+    print("Correct!")
+    break
+  }
+} #end i loop
