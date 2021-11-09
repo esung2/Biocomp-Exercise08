@@ -44,18 +44,29 @@ lines(MSU[,1], MSU[,2])
 randomNum <- sample(1:100, 1)
 
 #User input:
-guess <- as.integer(readline("I'm thinking of a number 1-100..."))
+guess <- as.integer(readline("I'm thinking of a number 1-100... "))
 
 #For loop
-for (n in 1:10){
-  if(as.integer(guess) < randomNum){
+for (i in 1:10){
+  if(guess < randomNum){
     print("Higher")
-    guess <- readline("Try again:")
-  }else if(as.integer(guess) > randomNum){
+    if(i<10){
+      guess <- as.integer(readline("Try again: "))
+    }
+    if (i==10){
+      print("Game over. You have used all 10 guesses.")
+    }
+  }else if(guess > randomNum){
     print("Lower")
-    guess <- readline("Try again:")
-  }else{
+    if(i<10){
+      guess <- as.integer(readline("Try again: "))
+    }
+    if (i==10){
+      print("Game over. You have used all 10 guesses.")
+    }
+  }else if (guess==randomNum){
     print("Correct!")
     break
   }
-} #end i loop
+}
+
